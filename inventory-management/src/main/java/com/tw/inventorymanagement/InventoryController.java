@@ -1,27 +1,33 @@
 package com.tw.inventorymanagement;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @RestController
 public class InventoryController {
-    private Set<String> inventory = new HashSet<>();
+    @Autowired
+    InventoryService inventoryService;
+    @PostMapping("/inventory/items/")
+    public ResponseEntity create(@RequestBody Item item) {
+        Item response = inventoryService.addItem(item);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
-    @PostMapping("/")
-    public ResponseEntity addItem(@RequestBody String itemName) {
-        inventory.add(itemName);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @DeleteMapping("/inventory/items/{id}")
+    public ResponseEntity delete(@PathVariable int id){
+        boolean response = inventoryService.deleteItemById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
-    @DeleteMapping ResponseEntity deleteItem(@RequestBody String itemName){
-        inventory.remove(itemName);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @GetMapping("/inventory/items")
+   public Set<Item> getItems(){
+       return inventoryService.getItem();
     }
+
+
 
 }
