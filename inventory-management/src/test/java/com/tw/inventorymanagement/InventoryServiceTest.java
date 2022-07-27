@@ -5,10 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -19,6 +19,9 @@ public class InventoryServiceTest {
 
     @InjectMocks
     private InventoryService inventoryService;
+    private Item items;
+
+
     @Test
     void shouldBeAbleToDeleteAnItemById(){
         when(repository.deleteItem(1)).thenReturn(true);
@@ -29,7 +32,7 @@ public class InventoryServiceTest {
     }
     @Test
     void shouldAddItem(){
-        Item item = new Item("Laptop",1);
+        Item item = new Item("Laptop",1,40000);
         when(repository.addItem(item)).thenReturn(true);
 
         inventoryService.addItem(item);
@@ -38,12 +41,22 @@ public class InventoryServiceTest {
     }
     @Test
     void shouldGetAllItems(){
-        when(repository.getItem()).thenReturn(Collections.emptySet());
+        Set<Item> items =Set.of(new Item("soap",1,10),
+                new Item("shoe",2,50));
+        when(repository.getItem()).thenReturn(items);
+        ItemDTO itemDTO =inventoryService.getItems();
 
-        inventoryService.getItem();
+        ItemDTO expected =new ItemDTO();
+        Set<Item> expectedItems = Set.of(new Item("soap",1,10),
+                new Item("shoe",2,50));
+        expected.setItems(expectedItems);
+        expected.setTotalPrice(60);
 
+        assertEquals(expected,itemDTO);
         verify(repository).getItem();
     }
+
+
 
 }
 

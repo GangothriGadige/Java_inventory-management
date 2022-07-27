@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Set;
+
 import static java.util.Collections.emptySet;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +24,8 @@ public class InventoryControllerTest {
     ObjectMapper objectMapper;
     @MockBean
     InventoryService inventoryService;
-    Item item = new Item("Laptop", 1);
+    Item item = new Item("Laptop", 1,40000);
+    Item items;
 
     @Test
     void shouldAddAnItemToTheInventory() throws Exception {
@@ -42,7 +45,7 @@ public class InventoryControllerTest {
     void shouldDeleteAnItemFromTheInventory() throws Exception {
         when(inventoryService.deleteItemById(1)).thenReturn(true);
 
-        mockMvc.perform(delete("/inventory/items/1"))
+        mockMvc.perform(delete("/inventory/items/1/"))
                 .andExpect(status().isNoContent())
                 .andExpect(content().string("true"));
 
@@ -51,13 +54,19 @@ public class InventoryControllerTest {
 
     @Test
     void shouldGetItemsInTheInventory() throws Exception {
-        when(inventoryService.getItem()).thenReturn(emptySet());
+        ItemDTO expected = new ItemDTO();
+        Set<Item> expectedItems = Set.of(new Item("soap",1,10),
+                new Item("shoe",2,50));
 
-        mockMvc.perform(get("/inventory/items"))
-                .andExpect(content().string("[]"))
+        expected.setItems(expectedItems);
+        when(inventoryService.getItems()).thenReturn(expected);
+
+        mockMvc.perform(get("/inventory/items/"))
+                .andExpect(content().string(objectMapper.writeValueAsString(expected)))
                 .andExpect(status().isOk());
 
-        verify(inventoryService).getItem();
+        verify(inventoryService).getItems();
     }
+
 
 }

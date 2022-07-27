@@ -3,12 +3,18 @@ package com.tw.inventorymanagement;
 import java.util.Objects;
 
 public class Item {
-    private String itemName;
-    private int id;
+    private final String itemName;
+    private final int id;
+    private final int price;
 
-    public Item(String itemName, int id) {
+    public Item(String itemName, int id, int price) {
         this.itemName = itemName;
         this.id = id;
+        this.price =price;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public String getItemName() {
@@ -19,12 +25,13 @@ public class Item {
         return id;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return id == item.id;
+        return id == item.id && Objects.equals(itemName, item.itemName);
     }
 
     @Override
