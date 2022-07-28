@@ -15,8 +15,11 @@ public class InventoryController {
 
     @PostMapping("/inventory/items/")
     public ResponseEntity<?> create(@RequestBody CreateItemDTO item) {
-        Boolean response = inventoryService.addItem(item);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        if(item.getItemName()==null || "".equals(item.getItemName())){
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(new ErrorDTO("Name is mandatory"));
+        }
+        UUID response = inventoryService.addItem(item);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResItemDTO(response));
     }
 
     @DeleteMapping("/inventory/items/{id}")
@@ -26,7 +29,7 @@ public class InventoryController {
     }
 
     @GetMapping("/inventory/items/")
-    public ItemDTO getItems() {
+    public ReqItemDTO getItems() {
         return inventoryService.getItems();
     }
 

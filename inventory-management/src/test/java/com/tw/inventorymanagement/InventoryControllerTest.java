@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Set;
 import java.util.UUID;
 
-import static java.util.Collections.emptySet;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,7 +31,7 @@ public class InventoryControllerTest {
     void shouldAddAnItemToTheInventory() throws Exception {
         CreateItemDTO item = new CreateItemDTO("soap",10);
         UUID id = UUID.randomUUID();
-        when(inventoryService.addItem(item)).thenReturn(true);
+        when(inventoryService.addItem(item)).thenReturn(id);
 
         mockMvc.perform(post("/inventory/items/")
                         .content(objectMapper.writeValueAsString(item))
@@ -58,7 +57,7 @@ public class InventoryControllerTest {
 
     @Test
     void shouldGetItemsInTheInventory() throws Exception {
-        ItemDTO expected = new ItemDTO();
+        ReqItemDTO expected = new ReqItemDTO();
         Set<Item> expectedItems = Set.of(new Item("soap",10),
                 new Item("shoe",50));
 

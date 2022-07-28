@@ -19,9 +19,9 @@ public class InventoryRepository {
         return true;
     }
 
-    public boolean addItem(Item item) {
+    public UUID addItem(Item item) {
         items.add(item);
-        return false;
+        return UUID.randomUUID();
     }
 
     public Set<Item> getItem() {

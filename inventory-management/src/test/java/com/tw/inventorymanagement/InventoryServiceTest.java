@@ -48,9 +48,9 @@ public class InventoryServiceTest {
         Set<Item> items =Set.of(new Item("soap",10),
                 new Item("shoe",50));
         when(repository.getItem()).thenReturn(items);
-        ItemDTO itemDTO =inventoryService.getItems();
+        ReqItemDTO itemDTO =inventoryService.getItems();
 
-        ItemDTO expected =new ItemDTO();
+        ReqItemDTO expected =new ReqItemDTO();
         Set<Item> expectedItems = Set.of(new Item("soap",10),
                 new Item("shoe",50));
         expected.setItems(expectedItems);

@@ -3,18 +3,18 @@ package com.tw.inventorymanagement;
 import java.util.Objects;
 import java.util.Set;
 
-public class ItemDTO {
+public class ReqItemDTO {
     private Set<Item> items;
     private double totalPrice;
-    public ItemDTO(){
+    public ReqItemDTO(){
 
     }
 
-    public ItemDTO(Set<Item> items, double totalPrice) {
+    public ReqItemDTO(Set<Item> items, double totalPrice) {
         this.items = items;
         this.totalPrice = totalPrice;
     }
-    public ItemDTO(Set<Item> items){
+    public ReqItemDTO(Set<Item> items){
         this.items=items;
     }
 
@@ -46,7 +46,7 @@ public class ItemDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ItemDTO itemDTO = (ItemDTO) o;
+        ReqItemDTO itemDTO = (ReqItemDTO) o;
         return Double.compare(itemDTO.totalPrice, totalPrice) == 0 && Objects.equals(items, itemDTO.items);
     }
 

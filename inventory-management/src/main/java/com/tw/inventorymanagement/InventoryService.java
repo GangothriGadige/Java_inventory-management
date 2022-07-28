@@ -16,12 +16,12 @@ public class InventoryService {
         this.idGenerator =idGenerator;
     }
 
-    public ItemDTO getItems(){
+    public ReqItemDTO getItems(){
         Set<Item> allItems = inventoryRepository.getItem();
-        return new ItemDTO(allItems,totalPrice(allItems));
+        return new ReqItemDTO(allItems,totalPrice(allItems));
     }
 
-    public boolean addItem(CreateItemDTO itemDTO) {
+    public UUID addItem(CreateItemDTO itemDTO) {
         UUID id = idGenerator.generate();
         Item item =new Item(itemDTO.getItemName(),id,itemDTO.getPrice());
         return inventoryRepository.addItem(item);
