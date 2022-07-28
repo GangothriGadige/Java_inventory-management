@@ -14,6 +14,9 @@ public class ItemDTO {
         this.items = items;
         this.totalPrice = totalPrice;
     }
+    public ItemDTO(Set<Item> items){
+        this.items=items;
+    }
 
     public Set<Item> getItems() {
         return items;

@@ -3,14 +3,17 @@ package com.tw.inventorymanagement;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 
 public class InventoryService {
     private InventoryRepository inventoryRepository;
+    private IdGenerator idGenerator;
 
-    public InventoryService(InventoryRepository inventoryRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, IdGenerator idGenerator) {
         this.inventoryRepository = inventoryRepository;
+        this.idGenerator =idGenerator;
     }
 
     public ItemDTO getItems(){
@@ -18,12 +21,13 @@ public class InventoryService {
         return new ItemDTO(allItems,totalPrice(allItems));
     }
 
-    public Item addItem(Item item) {
-        inventoryRepository.addItem(item);
-        return item;
+    public boolean addItem(CreateItemDTO itemDTO) {
+        UUID id = idGenerator.generate();
+        Item item =new Item(itemDTO.getItemName(),id,itemDTO.getPrice());
+        return inventoryRepository.addItem(item);
     }
 
-    public boolean deleteItemById(int id) {
+    public boolean deleteItemById(UUID id) {
         inventoryRepository.deleteItem(id);
         return false;
     }
@@ -34,5 +38,6 @@ public class InventoryService {
             totalPrice=totalPrice+ item.getPrice();
         }
         return totalPrice;
+
     }
 }

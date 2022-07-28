@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 public class InventoryController {
     @Autowired
@@ -12,13 +14,13 @@ public class InventoryController {
     private Item items;
 
     @PostMapping("/inventory/items/")
-    public ResponseEntity<?> create(@RequestBody Item item) {
-        Item response = inventoryService.addItem(item);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<?> create(@RequestBody CreateItemDTO item) {
+        Boolean response = inventoryService.addItem(item);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/inventory/items/{id}/")
-    public ResponseEntity<?> delete(@PathVariable int id) {
+    @DeleteMapping("/inventory/items/{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
         boolean response = inventoryService.deleteItemById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }

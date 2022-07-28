@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Collections.emptySet;
 import static org.mockito.Mockito.verify;
@@ -24,18 +25,20 @@ public class InventoryControllerTest {
     ObjectMapper objectMapper;
     @MockBean
     InventoryService inventoryService;
-    Item item = new Item("Laptop", 1,40000);
+    Item item1 = new Item("Laptop", 40000);
     Item items;
 
     @Test
     void shouldAddAnItemToTheInventory() throws Exception {
-        when(inventoryService.addItem(item)).thenReturn(item);
+        CreateItemDTO item = new CreateItemDTO("soap",10);
+        UUID id = UUID.randomUUID();
+        when(inventoryService.addItem(item)).thenReturn(true);
 
         mockMvc.perform(post("/inventory/items/")
                         .content(objectMapper.writeValueAsString(item))
                         .header("Content-Type", "application/json"))
-                .andExpect(status().isCreated())
-                .andExpect(content().string(objectMapper.writeValueAsString(item)));
+                .andExpect(status().isCreated());
+                //.andExpect(content().string(objectMapper.writeValueAsString(item)));
 
         verify(inventoryService).addItem(item);
 
@@ -43,20 +46,21 @@ public class InventoryControllerTest {
 
     @Test
     void shouldDeleteAnItemFromTheInventory() throws Exception {
-        when(inventoryService.deleteItemById(1)).thenReturn(true);
+        UUID idToDelete =UUID.randomUUID();
+        when(inventoryService.deleteItemById(idToDelete)).thenReturn(false);
 
-        mockMvc.perform(delete("/inventory/items/1/"))
+        mockMvc.perform(delete("/inventory/items/"+idToDelete))
                 .andExpect(status().isNoContent())
-                .andExpect(content().string("true"));
+                .andExpect(content().string("false"));
 
-        verify(inventoryService).deleteItemById(1);
+        verify(inventoryService).deleteItemById(idToDelete);
     }
 
     @Test
     void shouldGetItemsInTheInventory() throws Exception {
         ItemDTO expected = new ItemDTO();
-        Set<Item> expectedItems = Set.of(new Item("soap",1,10),
-                new Item("shoe",2,50));
+        Set<Item> expectedItems = Set.of(new Item("soap",10),
+                new Item("shoe",50));
 
         expected.setItems(expectedItems);
         when(inventoryService.getItems()).thenReturn(expected);

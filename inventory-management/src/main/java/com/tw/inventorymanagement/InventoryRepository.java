@@ -4,12 +4,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
+
 @Repository
 public class InventoryRepository {
     Set<Item> items = new HashSet<>();
-    int totalPrice;
 
-    public boolean deleteItem(int id) {
+    public boolean deleteItem(UUID id) {
         for(Item item:items){
             if(item.getId()==id){
                 items.remove(item);
@@ -20,7 +21,7 @@ public class InventoryRepository {
 
     public boolean addItem(Item item) {
         items.add(item);
-        return true;
+        return false;
     }
 
     public Set<Item> getItem() {
