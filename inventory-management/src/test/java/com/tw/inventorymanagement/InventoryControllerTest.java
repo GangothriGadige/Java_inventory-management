@@ -28,7 +28,7 @@ public class InventoryControllerTest {
     Item items;
 
     @Test
-    void shouldAddAnItemToTheInventory() throws Exception {
+    void shouldAddAnItemToTheInventory() throws Exception{
         CreateItemDTO item = new CreateItemDTO("soap",10);
         UUID id = UUID.randomUUID();
         when(inventoryService.addItem(item)).thenReturn(id);

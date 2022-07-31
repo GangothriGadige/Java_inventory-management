@@ -18,7 +18,7 @@ public class InventoryController {
         if(item.getItemName()==null || "".equals(item.getItemName())){
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(new ErrorDTO("Name is mandatory"));
         }
-        UUID response = inventoryService.addItem(item);
+        UUID response =inventoryService.addItem(item);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResItemDTO(response));
     }
 

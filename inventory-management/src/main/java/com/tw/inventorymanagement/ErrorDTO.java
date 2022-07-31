@@ -17,4 +17,6 @@ public class ErrorDTO {
 
     public ErrorDTO() {
     }
+
 }
+

@@ -21,7 +21,13 @@ public class InventoryService {
         return new ReqItemDTO(allItems,totalPrice(allItems));
     }
 
-    public UUID addItem(CreateItemDTO itemDTO) {
+    public UUID addItem(CreateItemDTO itemDTO)throws IllegalArgumentException{
+        Set<Item> items = inventoryRepository.getItem();
+        for(Item item :items){
+            if(item.getItemName().equals(itemDTO.getItemName())){
+                throw new IllegalArgumentException("Name already exists");
+            }
+        }
         UUID id = idGenerator.generate();
         Item item =new Item(itemDTO.getItemName(),id,itemDTO.getPrice());
         return inventoryRepository.addItem(item);

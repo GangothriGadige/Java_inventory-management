@@ -33,7 +33,7 @@ public class InventoryServiceTest {
         verify(repository).deleteItem(idToDelete);
     }
     @Test
-    void shouldAddItem(){
+    void shouldAddItem() {
         CreateItemDTO item = new CreateItemDTO("soap",10);
         UUID id = UUID.randomUUID();
         when(idGenerator.generate()).thenReturn(id);
